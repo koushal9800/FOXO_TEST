@@ -1,12 +1,17 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, FlatList, TouchableOpacity, } from 'react-native';
 import CompanyItem from '../Components/CompanyItem';
 import company from '../Utilities/company.json';
-import {TextInput} from 'react-native-paper';
+import {Modal, TextInput} from 'react-native-paper';
 import {AppProps} from '../Navigation/Navigation';
 
 const SearchScreen = ({navigation}: AppProps<'Search'>) => {
   const [text, setText] = React.useState('');
+  const [addList, setAddList] = React.useState('')
+  const [visible, setVisible] = React.useState(false);
+
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
   const filteredCompanies = company.filter(item =>
     item.name.toLowerCase().includes(text.toLowerCase()),
   );
@@ -43,7 +48,7 @@ const SearchScreen = ({navigation}: AppProps<'Search'>) => {
         )}
       />
 
-      <TouchableOpacity
+      <TouchableOpacity onPress={showModal}
         style={{
           position: 'absolute',
           bottom: 12,
@@ -53,6 +58,31 @@ const SearchScreen = ({navigation}: AppProps<'Search'>) => {
         }}>
         <Text style={{color: 'white', padding: 8}}>Create List</Text>
       </TouchableOpacity>
+
+      <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={{backgroundColor: 'white', padding: 20, margin:12}}>
+          <Text>Add Your Favourite Company name</Text>
+          <TextInput
+          label="Enter Company Name"
+          value={addList}
+          mode="outlined"
+          onChangeText={addList => setAddList(addList)}
+          style={{backgroundColor: 'white', marginTop:12}}
+          placeholderTextColor="#0000"
+          cursorColor="#000"
+          outlineStyle={{borderColor: '#000'}}
+        />
+        <TouchableOpacity onPress={showModal}
+        style={{
+         
+          marginTop:12,
+          alignItems:'center',
+          backgroundColor: '#47535E',
+          borderRadius: 2,
+          alignSelf:'flex-end'
+        }}>
+        <Text style={{color: 'white', padding: 8}}>Add List</Text>
+      </TouchableOpacity>
+        </Modal>
     </View>
   );
 };
