@@ -9,7 +9,9 @@ type companyProps= {
 const CompanyItem = ({name,cityName}:companyProps) =>{
     return (
         <View style={styles.container} >
+            <View>
             <Text style={styles.companyTitleStyle} >{name}</Text>
+            </View>
             <View style={styles.cityContainer} >
             <Text style={styles.cityTextStyle} >{cityName}</Text>
             </View>
