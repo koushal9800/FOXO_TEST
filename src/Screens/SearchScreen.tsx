@@ -3,8 +3,9 @@ import {View, Text, ScrollView, StyleSheet} from 'react-native';
 import CompanyItem from '../Components/CompanyItem';
 import company from '../Utilities/company.json';
 import {TextInput} from 'react-native-paper';
+import { AppNavigationProps, AppProps } from '../Navigation/Navigation';
 
-const SearchScreen = () => {
+const SearchScreen = ({navigation}:AppProps<'Search'>) => {
   const [text, setText] = React.useState('');
   const filteredCompanies = company.filter(item =>
     item.name.toLowerCase().includes(text.toLowerCase()),
@@ -28,7 +29,7 @@ const SearchScreen = () => {
         {filteredCompanies.map((item, index) => {
           return (
             <View key={index}>
-              <CompanyItem name={item.name} cityName={item.city} />
+              <CompanyItem name={item.name} cityName={item.city} goToDetails={()=>navigation.navigate('Details',{title:item.name,subTitle:item.city})} />
             </View>
           );
         })}
