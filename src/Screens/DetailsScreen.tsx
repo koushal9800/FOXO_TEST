@@ -2,6 +2,7 @@ import React from "react";
 import {View,Text, StyleSheet} from 'react-native'
 import { AppProps } from "../Navigation/Navigation";
 
+
 const DetailsScreen = ({route}:AppProps<'Details'>)=>{
     const {title,subTitle} = route.params
     return (

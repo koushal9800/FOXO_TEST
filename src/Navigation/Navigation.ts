@@ -3,7 +3,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 
 export type AppNavigationProps = {
     Search:undefined;
-    Details: {title:'string', subTitle:'string'}
+    Details: {title:string, subTitle:string}
 }
 
 export type AppProps<T extends keyof AppNavigationProps> =
