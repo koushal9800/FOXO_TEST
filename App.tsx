@@ -1,10 +1,11 @@
 import React from "react";
 import { View,Text } from "react-native";
+import SearchScreen from "./src/Screens/SearchScreen";
 
 const App = () =>{
 return (
   <View>
-    <Text>App</Text>
+    <SearchScreen/>
   </View>
 )
 }
