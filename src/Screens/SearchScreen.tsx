@@ -10,21 +10,51 @@ const SearchScreen = ({navigation}: AppProps<'Search'>) => {
   const [addList, setAddList] = React.useState('');
   const [addCity, setAddCity] = React.useState('')
   const [visible, setVisible] = React.useState(false);
-  const [companies,setComapnies] = React.useState(company)
+  const [companies,setCompanies] = React.useState(company)
+  const [editIndex, setEditIndex] = React.useState<number | null>(null);
 
   const showModal = () => setVisible(true);
-  const hideModal = () => setVisible(false);
+  const hideModal = () => {
+    setAddList('');
+    setAddCity('');
+    setEditIndex(null);
+    setVisible(false);
+  };
 
-const handleAddCompanyName = () =>{
-  if (!addList.trim()) {
-    Alert.alert('Error', 'Company name cannot be empty.');
-    return;
-  }
-  setComapnies(prev=>[{name:addList.trim(),city:addCity.trim()},...prev])
-  setAddList('')
-  setAddCity('')
-  hideModal()
-}
+  const handleAddCompanyName = () => {
+    if (!addList.trim()) {
+      Alert.alert('Error', 'Company name cannot be empty.');
+      return;
+    }
+
+    if (editIndex !== null) {
+    
+      const updatedCompanies = [...companies];
+      updatedCompanies[editIndex] = { name: addList.trim(), city: addCity.trim() };
+      setCompanies(updatedCompanies);
+    } else {
+     
+      setCompanies(prev => [{ name: addList.trim(), city: addCity.trim() }, ...prev]);
+    }
+
+    hideModal();
+  };
+
+  const handleDeleteCompany = (index: number) => {
+    Alert.alert('Delete', 'Are you sure you want to delete this company?', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Delete', style: 'destructive', onPress: () => {
+        setCompanies(prev => prev.filter((_, i) => i !== index));
+      }},
+    ]);
+  };
+
+  const handleEditCompany = (index: number) => {
+    setEditIndex(index);
+    setAddList(companies[index].name);
+    setAddCity(companies[index].city);
+    showModal();
+  };
 
   const filteredCompanies = companies.filter(item =>
     item.name.toLowerCase().includes(text.toLowerCase()),
@@ -48,7 +78,7 @@ const handleAddCompanyName = () =>{
         data={filteredCompanies}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{paddingBottom: 45}}
-        renderItem={({item}) => (
+        renderItem={({item,index}) => (
           <CompanyItem
             name={item.name}
             cityName={item.city}
@@ -58,6 +88,8 @@ const handleAddCompanyName = () =>{
                 subTitle: item.city,
               })
             }
+            onDelete={() => handleDeleteCompany(index)} 
+            onEdit={() => handleEditCompany(index)}
           />
         )}
       />
@@ -95,8 +127,8 @@ const handleAddCompanyName = () =>{
           cursorColor="#000"
           outlineStyle={{borderColor: '#000'}}
         />
-        <TouchableOpacity onPress={handleAddCompanyName} style={styles.addButton}>
-          <Text style={{color: 'white', padding: 8}}>Add List</Text>
+      <TouchableOpacity onPress={handleAddCompanyName} style={styles.addButton}>
+          <Text style={styles.buttonText}>{editIndex !== null ? 'Update' : 'Add'}</Text>
         </TouchableOpacity>
       </Modal>
     </View>
@@ -123,6 +155,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#47535E',
     borderRadius: 2,
     alignSelf: 'flex-end',
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
 
