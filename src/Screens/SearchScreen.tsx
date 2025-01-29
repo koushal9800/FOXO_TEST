@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, FlatList, TouchableOpacity, Alert} from 'react-native';
 import CompanyItem from '../Components/CompanyItem';
 import company from '../Utilities/company.json';
 import {Modal, TextInput} from 'react-native-paper';
@@ -16,6 +16,10 @@ const SearchScreen = ({navigation}: AppProps<'Search'>) => {
   const hideModal = () => setVisible(false);
 
 const handleAddCompanyName = () =>{
+  if (!addList.trim()) {
+    Alert.alert('Error', 'Company name cannot be empty.');
+    return;
+  }
   setComapnies(prev=>[{name:addList.trim(),city:addCity.trim()},...prev])
   setAddList('')
   setAddCity('')
